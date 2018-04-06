@@ -25,7 +25,13 @@ sigma = zeros(1, size(X, 2));
 %
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
-
+for feature_index = 1:size(X, 2)
+  feature_set = X(:,feature_index);
+  mu(feature_index) = mean(feature_set);
+  sigma(feature_index) = std(feature_set);
+  normalized_feature_set = (feature_set - mu(feature_index)) ./ (sigma(feature_index));
+  X_norm(:,feature_index) = normalized_feature_set;
+end
 
 
 

@@ -12,6 +12,11 @@ J = 0;
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
+guesses = X * theta;
+errors = guesses - y;
+squaredErrors = errors .^2;
+
+J = sum(squaredErrors) / (2 * m);
 
 
 
