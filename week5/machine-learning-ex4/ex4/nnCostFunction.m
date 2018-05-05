@@ -62,9 +62,42 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+XwithBias = [ones(m, 1), X];
 
+z2 = (Theta1 * XwithBias')';
 
+a2 = sigmoid(z2);
 
+a3 = sigmoid(Theta2 * [ones(m, 1), a2]');
+
+for i = 1:m
+  yVec = createYLogicalVector(num_labels, y, i);
+  a3i = a3(:,i);
+  a2i = a2'(:,i);
+  a1i = XwithBias(i,:);
+  z2i = z2(i,:)';
+  J += sum(-yVec' * log(a3i) - (1 - yVec') * log(1 - a3i));
+
+  % run back prop
+  d3i = a3i - yVec;
+  d2i = (Theta2' * d3i) .* sigmoidGradient([1; z2i]);
+
+  Theta1_grad = Theta1_grad + (d2i * a1i)(2:end,:);
+  Theta2_grad = Theta2_grad + (d3i * [1; a2i]');
+endfor
+
+J /= m;
+Theta1_grad /= m;
+Theta2_grad /= m;
+
+squaredTheta1 = Theta1 .^ 2;
+squaredTheta2 = Theta2 .^ 2;
+squaredTheta1WithoutBias = squaredTheta1(:,2:end);
+squaredTheta2WithoutBias = squaredTheta2(:,2:end);
+
+regularizationTerm = (lambda/(2 * m)) * ...
+  (sum(squaredTheta1WithoutBias(:)) + sum(squaredTheta2WithoutBias(:)));
+J += regularizationTerm;
 
 
 
@@ -88,4 +121,9 @@ Theta2_grad = zeros(size(Theta2));
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 
+end
+
+function yVec = createYLogicalVector(number_of_labels, y, example_number)
+  yVec = zeros(number_of_labels, 1);
+  yVec(y(example_number)) = 1;
 end
