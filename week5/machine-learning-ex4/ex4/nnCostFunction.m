@@ -64,18 +64,18 @@ Theta2_grad = zeros(size(Theta2));
 
 XwithBias = [ones(m, 1), X];
 
-z2 = (Theta1 * XwithBias')';
+z2 = (Theta1 * XwithBias');
 
 a2 = sigmoid(z2);
 
-a3 = sigmoid(Theta2 * [ones(m, 1), a2]');
+a3 = sigmoid(Theta2 * [ones(1, m); a2]);
 
 for i = 1:m
   yVec = createYLogicalVector(num_labels, y, i);
   a3i = a3(:,i);
-  a2i = a2'(:,i);
+  a2i = a2(:,i);
+  z2i = z2(:,i);
   a1i = XwithBias(i,:);
-  z2i = z2(i,:)';
   J += sum(-yVec' * log(a3i) - (1 - yVec') * log(1 - a3i));
 
   % run back prop
@@ -99,19 +99,12 @@ regularizationTerm = (lambda/(2 * m)) * ...
   (sum(squaredTheta1WithoutBias(:)) + sum(squaredTheta2WithoutBias(:)));
 J += regularizationTerm;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+non_bias_Theta1 = [zeros(size(Theta1,1), 1) Theta1(:,2:end)];
+non_bias_Theta2 = [zeros(size(Theta2,1), 1) Theta2(:,2:end)];
+Theta1_reg_term = (lambda/m) * non_bias_Theta1;
+Theta2_reg_term = (lambda/m) * non_bias_Theta2;
+Theta1_grad += Theta1_reg_term;
+Theta2_grad += Theta2_reg_term;
 
 % -------------------------------------------------------------
 
