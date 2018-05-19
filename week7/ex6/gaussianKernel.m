@@ -16,7 +16,8 @@ sim = 0;
 %
 %
 
-
+squaredDifference = (x1 - x2) .^2;
+sim = exp(-(sum(squaredDifference)/ (2 * sigma^2)));
 
 
 
