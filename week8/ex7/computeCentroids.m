@@ -26,7 +26,12 @@ centroids = zeros(K, n);
 % Note: You can use a for-loop over the centroids to compute this.
 %
 
-
+for k = 1:K
+  kth_rows = (idx(:,end) == k);
+  k_examples = X(kth_rows, :);
+  number_of_examples = size(k_examples, 1);
+  centroids(k,:) = (1/ number_of_examples) * sum(k_examples);
+endfor
 
 
 

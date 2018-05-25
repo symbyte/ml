@@ -20,7 +20,11 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
-
+for i = 1:length(idx)
+  example = X(i,:);
+  d = squaredDistance(centroids', example');
+  [x,idx(i)] = min(d);
+endfor
 
 
 
@@ -29,5 +33,9 @@ idx = zeros(size(X,1), 1);
 
 % =============================================================
 
+end
+
+function distance = squaredDistance(v1, v2)
+  distance = sum((v1 - v2).^2);
 end
 
